@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta charset='utf-8'>
+        <link rel="stylesheet" href="gallery.css">
+        <link rel='icon' href="data:;base64,=">
+        <meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=no'>
+        
+    </head>
+    <body>
+            <header>
+                <div>
+                    <img src="./logo.jpeg" alt="">
+                    <ul>
+                        <li>首页</li>
+                        <li>文章</li>
+                        <li>作品</li>
+                        <li>关于</li>
+                    </ul>
+                </div>
+               <a href="https://www.github.com"> <img src="./gitbuhicon.jpg" alt=""></a>
+            </header>
+           <div id='container'>
+            <div class='left'>
+               <ul class='navi'>
+                   <li class='on'>ALL</li>
+                   <li>javascript Util</li>
+                   <li>UI Components</li>
+                   <li>Framework</li>
+                   <li>Application</li>
+               </ul>
+               <div class='gallery grid' data-masonry='{ "itemSelector": ".grid-item","columnWidth": 160,"gutter": 10}'>
+                    <div class='grid-item grid-item--width2'>12321</div>
+                    <div  class=' grid-item ' style='height:144px;'>  column-span:2;</div>
+                    <div class='grid-item' >1</div>
+                    <div class='grid-item'>2</div>
+                    <div class='grid-item' style='height:170px;'>3</div>
+                    <div class='grid-item' style='height:130px;'>4</div>
+                    <div class='grid-item'>5</div>
+                    <div class='grid-item'>5</div>
+                    <div class='grid-item'>5</div>
+                    <div class='grid-item'>5</div>
+                    <div class='grid-item'>5</div>
+
+               </div>
+            </div>
+            <div class='right'>
+                <div class='component'>
+                    <div class='search'> 
+                        <input type="text" placeholder="Keywords">
+                        <div class='but'>GO</div>
+                    </div>
+                </div>
+                <div class='component'>
+                    <div>
+                        <ul>
+                            <li> 
+                               <div class='order'>1</div><div class='progress'> <div class='bar' style='width:80%'></div></div> ui.tree
+                            </li>
+                            <li>
+                                <div class='order'>2</div><div class='progress'> <div class='bar' style='width:60%'></div></div>uitrim
+                            </li>
+                            <li>
+                                <div class='order'>3</div><div class='progress'> <div class='bar' style='width:40%'></div></div>app.todo
+                            </li>
+                            <li>
+                                <div class='order'>4</div><div class='progress'> <div class='bar' style='width:20%'></div></div>ui.tab
+                            </li>
+                            </ul>
+                    </div>
+
+                </div>
+            </div>
+           </div>
+            <footer>
+                <div class='ulcon'>
+                    <ul>
+                        <li>首页</li>
+                        <li>文章</li>
+                        <li>作品</li>
+                        <li>关于</li>
+                    </ul>
+                </div>
+                <div id='cop'>
+                    <ul>
+                        学习资料
+                        <li>1</li>
+                        <li>2</li>
+                    </ul>
+                    <ul>
+                        友情链接
+                        <li>1</li>
+                        <li>2</li>
+                    </ul>
+                    <ul>
+                        学习资料
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                    </ul>
+                    <ul>
+                        学习资料
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                    </ul>
+                    <ul>
+                            友情链接
+                            <li>1</li>
+                            <li>2</li>
+                            <li>3</li>
+                    </ul>
+                   
+                </div>
+                <div id='ext'>
+                    <p>版权信息</p>
+                    <img src="./gitbuhicon.jpg" alt="">
+                </div>
+            </footer>
+            <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
+    </body>
+</html>

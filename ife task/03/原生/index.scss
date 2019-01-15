@@ -1,0 +1,29 @@
+li{
+    position: relative;
+    margin:10px;
+    border:2px solid black;
+    // &:hover{
+    //     span{
+    //         color:red;
+    //     }
+    // }
+    span{
+    
+    }
+}
+.on{
+    background: red !important;
+}
+.top{
+    li{
+        background: silver;
+    }
+}
+.second{
+    li{
+        background-color: orange;
+    }
+}
+#container{
+    width:200px;
+}
