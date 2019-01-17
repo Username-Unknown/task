@@ -12,10 +12,38 @@
   </style>
 </head>
 <body>
-        <button id="add">添加</button> <button id='del'>添加</button>
-    <p>所有任务</p>
-    <ul id='container' class='top'>
+        
+
+<div id=page>
+    <div id='left'>
+        <p>所有任务</p>
         分类列表
+        <ul id='container' class='top'>
+
+        </ul>
+        <div class='buttonArea'> <button id="add">添加</button> <button id='del'>删除</button></div>
+       
+    </div>
+    <div id='middle'>
+        <div class='buttonArea'>
+            <button id='showConfirmed'>显示完成</button> <button id='showTodo'>显示未完成</button>
+            <button id='showAll'>显示所有</button>
+        </div>
+        <div id='tasklist'>
+        </div>
+        <div class='buttonArea'>
+            <button id="addTask">添加</button> <button id='delTask'>删除</button>
+        </div>
+
+    </div>
+    <div id='right'>
+        <button id='edit'>编辑</button> <button id='confirm'>确认</button>
+        <button id='complete'>完成</button><button id='todo'>又没有完成</button>
+        <div id='taskcontent'>
+
+        </div>
+    </div>
+</div>
         <!-- <li >
             <ul class='second'>
                 默认
@@ -32,7 +60,8 @@
                 </li>
             </ul>
         </li> -->
-    </ul>
+   
     <script src='util.js'></script>
+    <!-- <script src='./datastructuredesign.js'></script> -->
 </body>
 </html>
