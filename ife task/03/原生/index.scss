@@ -59,28 +59,32 @@ ul{
 }
 #left{
     height:100vh;
-    min-height: 50vh;
     display:flex;
     flex-direction: column ;
     border-right:2px solid silver;
     #container{
-        height:100%;
         overflow:auto;
+        flex-grow:1;
+        
     }
     .buttonArea{
         height:50px;
+        flex-grow: 0;
+        flex-shrink: 0;
     }
 }
 #middle{
-    
+    height:100vh;
     display:flex;
     flex-direction: column ;
     #tasklist{
-        height:100%;
         overflow:auto;
+        flex-grow:1;
     }
     .buttonArea{
         height:50px;
+        flex-grow: 0;
+        flex-shrink: 0;
     }
 }
 #right{
