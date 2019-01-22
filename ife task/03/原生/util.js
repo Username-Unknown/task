@@ -58,6 +58,18 @@ function findObjReturnIndex(arr,name){
             return i;
         }
     }
+    return -1;
+}
+
+function findObjByDateReturnIndex(arr,name){
+    // console.log(name);
+    var length=arr.length;
+    for(var i=0;i<length;i++){  
+        if(arr[i]['name'] == name){
+            return i;
+        }
+    }
+    return -1;
 }
 
 function build(){
@@ -92,79 +104,67 @@ function buildsecond(arr,container){
 }
 
 
-function buildTaskList(){//参数该为第三级 日期数组 显示所有
+function buildTaskList(show=0){//参数该为第三级 日期数组 显示所有
+    $('#edit').innerText='编辑';
     var container=$("#tasklist");//生成区域
     container.innerHTML="";
+    let store=[];
     //获取数据
-    for(let day of currentSecond['value']){//日期数组中的一项，称作day
-        let ul = document.createElement('ul') 
+    for(let task of currentSecond['value']){
+        if(show){//show==0 默认 显示全部 跳过判断,show！=0 要条件 进行判断
+            if(task['done']!==show){//要和show相同才能通过 否则跳过(continue)
+                continue
+            }
+        }
+        task['done']
+        let date=task['date'];//
+        let index=findObjByDateReturnIndex(store,date)//查看该日期是否已经存在
+       
+        if(index<0){//不存在,新建并放入store
+            let content={
+                "name":date,
+                "value":[task]
+            }
+            store.push(content);
+        }else{
+            store[index]['value'].push(task);
+        }
+    }
+    console.log(store);
+    //对store排序
+    store.sort(sortrule);
+    console.log(store);
+    //遍历store并build
+    for(let day of store){
+        let ul=document.createElement('ul');
         let title= document.createElement(titleName);
         title.innerText=day['name'];
-        ul.appendChild(title)
+        ul.appendChild(title);
         for(let task of day['value']){
             let li = document.createElement('li') 
             li.innerText=task['name'];
             ul.appendChild(li)
         }
-        container.appendChild(ul);
+        container.appendChild(ul)
     }
-
+}
+function sortrule(a,b){
+    if(a['name']>=b['name']){
+        console.log('a>b');
+        return 1;
+    }
+    console.log('a<b');
+    return -1;
 }
 
-function checkConfirmed(arr){//检查是否有done
-   return arr.some(function(element){
-        return element['done']
-    })
-}
-function checkToDo(arr){//检查是否有done
-    return arr.some(function(element){
-         return !element['done']
-     })
- }
 function showConfirmed(){
-    var container=$("#tasklist");//生成区域
-    container.innerHTML="";//清空
-    for(let day of currentSecond['value']){//遍历
-        //查看是是否有done的
-       let flag=checkConfirmed(day['value']);
-       if(flag){
-            let ul = document.createElement('ul') 
-            let title= document.createElement(titleName);
-            title.innerText=day['name'];
-            ul.appendChild(title)
-            for(let task of day['value']){
-               if(task['done']){
-                    let li = document.createElement('li') 
-                    li.innerText=task['name'];
-                    ul.appendChild(li)
-               }
-            }
-        container.appendChild(ul);    
-       }
-    }
+    buildTaskList(1);
+
 }
 
 function showtodo(){
-    var container=$("#tasklist");//生成区域
-    container.innerHTML="";//清空
-    for(let day of currentSecond['value']){//遍历
-        //查看是是否有done的
-       let flag=checkToDo(day['value']);
-       if(flag){
-            let ul = document.createElement('ul') 
-            let title= document.createElement(titleName);
-            title.innerText=day['name'];
-            ul.appendChild(title)
-            for(let task of day['value']){
-               if(!task['done']){
-                    let li = document.createElement('li') 
-                    li.innerText=task['name'];
-                    ul.appendChild(li)
-               }
-            }
-        container.appendChild(ul);    
-       }
-    }
+    buildTaskList(-1);
+
 }
 function rebuildTaskList(){//根据current的值来判断使用 buildTaskList  showConfirmed 和 showToDo
     switch(currentShow){
@@ -186,7 +186,7 @@ function buildTaskContent(){
     var detail=document.createElement("p");
     var div=document.createElement('div');
     title.innerText=currentFourth['name'];
-    date.innerText="任务日期"+currentThird['name'];
+    date.innerText="任务日期"+currentFourth['date'];
     detail.innerText=currentFourth['value'];
     detail.id='taskdetail'
     div.appendChild(title);
@@ -198,13 +198,18 @@ function buildTaskContent(){
 }
 
 function IntoEditMode(){//最右栏进入编辑模式
+    $('#edit').innerText='取消编辑';
     var container=$('#taskcontent')
     var mototitle=container.querySelector(titleName).innerText;
     var input=document.createElement('input');//用input替换原来的部分
     input.value=mototitle;
     container.appendChild(input);
     var p=document.createElement('p');
-    p.innerText=container.querySelector("p").innerText;
+    //p.innerText=container.querySelector("p").innerText;
+    p.innerText='任务日期'
+    var dateinput=document.createElement('input')
+    dateinput.value=currentFourth['date']
+    p.appendChild(dateinput);
     var textare=document.createElement('textarea');
     textare.value= container.querySelector('#taskdetail').innerText;
     var div=document.createElement('div');
@@ -218,8 +223,10 @@ function IntoEditMode(){//最右栏进入编辑模式
 function confirm(){
     var  container=$('#taskcontent');
     var title=container.querySelector('input').value;
+    var date=container.querySelectorAll('input')[1].value;
     var detail=container.querySelector('textarea').value;
     currentFourth['name']=title;
+    currentFourth['date']=date;
     currentFourth['value']=detail;
     save()
     buildTaskList()
@@ -233,44 +240,10 @@ function save(){//保存
 var storage=window.localStorage;
 var data=[{"默认":[]},{"project 01":[{"task01":""},{"task02":""}]}]
 
-// var datawork=[//文件夹存于数组
-//     {//第一级 , 文件夹
-//         "name":"默认",
-//         'value':[]
-//     },
-//     {//第一级 , 文件夹
-//         "name":"ifeproject",//文件夹名字
-//         "value":[//文件存于数组
-//             {//第二级文件
-//                 "name":"文件名",
-//                 "value":[
-//                     {//第三级别 日期
-//                         "name":"2019-1-15",
-//                         "value":[
-//                             {
-//                                 "name":"todo1",
-//                                 "value":"完成编码工作"
-//                             },
-//                             {
-//                                 "name":"todo2",
-//                                 "value":"继续完成"
-//                             }
-//                         ]
-//                     }
-//                 ]
-//             },
-//         ]
-//     }
-// ]
-
-// storage['project']=JSON.stringify(datawork)
-
-
 //全局变量
 var datawork=JSON.parse(storage.getItem("project"))
 var currentFirst; //当前选中的第一级
 var currentSecond;//当前选中的第二级
-var currentThird;//当前选中的第三级
 var currentFourth;
 var currentShow;//记录显示完成1 显示未完成- 显示所有的状态0
 var titleName="H2"
@@ -387,50 +360,31 @@ addEvent($('#tasklist'),'click',function(event){//选中 中间栏
     var target=event.target;
     removeClass($('.taskon'),'taskon')
     if(target.tagName == 'LI'){   
-        currentThird=findObjWithName(currentSecond['value'],target.parentNode.firstElementChild.innerText.split("\n")[0]);
-        currentFourth=findObjWithName(currentThird["value"],target.innerText)
+        currentFourth=findObjWithName(currentSecond["value"],target.innerText)
         console.log(currentFourth);
         addClass(target,'taskon');
         buildTaskContent();
-    }else if(target.tagName == titleName){
-        currentThird=findObjWithName(currentSecond['value'],target.innerText)
-        addClass(target,'taskon');
     }
 })
 
 addEvent($('#addTask'),'click',function(event){//添加第四级别或第三级别
-    var target=$(".taskon")
-    if(!target){//如果没有选中第三级别则 添加的是第三级别
-        let res={}
-        let date=prompt('在'+currentFirst['name']+'的'+currentSecond['name']+'建立新日期?'+'\n输入日期(建议格式yyyy-mm-dd)')
-        if(date==''||name==null)
-            return ;
-        res['name']=date;
-        res["value"]=[];
-        currentSecond['value'].push(res);
-        save()
-        buildTaskList();
-        return;
-    }
-    if(target.tagName == titleName){
         res={};
-        name=prompt("name")
-        if( name == ''||name==null)
-            return
+        let name=prompt("name")
+        if( name == ''||name==null){
+            return;
+        }
         res['name']=name;
         res['done']=false;//默认是未完成的
         res['value']='';
-        console.log(currentThird['value'])
-        currentThird['value'].push(res);
+        currentSecond['value'].push(res);
         save()
         rebuildTaskList();
-    }
 })
 addEvent($('#delTask'),'click',function(event){//删除四级别或第三级别
     var target=$(".taskon")  
     if(target.tagName == 'LI'){
-        var selfIndex=findObjReturnIndex(currentThird['value'],target.innerText);
-        currentThird['value'].splice(selfIndex,1);
+        var selfIndex=findObjReturnIndex(currentSecond['value'],target.innerText);
+        currentSecond['value'].splice(selfIndex,1);
         save()
         buildTaskList();
     }
@@ -454,7 +408,12 @@ addEvent($('#showAll'),'click',function(){
 
 
 //右栏操作
-addEvent($('#edit'),'click',function(){
+addEvent($('#edit'),'click',function(event){
+    if(event.target.innerText=='取消编辑'){
+        buildTaskContent();
+        event.target.innerText='编辑'
+        return;
+    }
     IntoEditMode();
 })
 
@@ -462,12 +421,12 @@ addEvent($('#confirm'),'click',function(){
     confirm()
 })
 addEvent($('#complete'),'click',function(){
-    currentFourth['done']=true;
+    currentFourth['done']=1;
     save();
     rebuildTaskList();
 })
 addEvent($('#todo'),'click',function(){
-    currentFourth['done']=false;
+    currentFourth['done']=-1;
     save();
     rebuildTaskList();
 })
