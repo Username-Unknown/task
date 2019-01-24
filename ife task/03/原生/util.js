@@ -40,25 +40,23 @@ function classContain(element,tarClassName){//检测class是否包含tarClassNam
 }
 
 function findObjWithName(arr,name){
-    // console.log(name);
-    // console.log(typeof name);
+
     for(var project of arr){  
         if(project['name'] == name){
-            //console.log(project);
             return project;
         }
     }
 }
 
 function findObjReturnIndex(arr,name){
-    // console.log(name);
+
     var length=arr.length;
     for(var i=0;i<length;i++){  
         if(arr[i]['name'] == name){
             return i;
         }
     }
-    return -1;
+    return null;
 }
 
 function findObjByDateReturnIndex(arr,name){
@@ -73,11 +71,24 @@ function findObjByDateReturnIndex(arr,name){
 }
 
 function build(){
-    buildtop(datawork);
+    buildtop();
 }
 function rebuild(){
     $('#container').innerHTML='';
     build();
+}
+function toggleFirst(element){
+    if(sceondOpen==true){
+        clearFirst(element);
+    }else{
+        buildsecond(currentFirst['value'],element);
+    }
+    sceondOpen=!sceondOpen;
+}
+function clearFirst(element){
+    var title=element.firstElementChild;
+    element.innerHTML='';
+    element.appendChild(title);
 }
 function countTask(second){//统计二级对象的任务数量
     return second['value'].length;
@@ -90,8 +101,8 @@ function conutAllTask(first){//统计一级对象的任务数量
     }
     return res;
 }
-function buildtop(arr){ 
-    for(let project of arr){
+function buildtop(){ 
+    for(let project of datawork){
             let li=document.createElement("li");
             let ul=document.createElement("ul");
             let title=document.createElement(titleName);
@@ -102,12 +113,17 @@ function buildtop(arr){
             ul.className='second';
             ul.appendChild(title);
             li.appendChild(ul);
-            buildsecond(project['value'],ul)
+            if(project==currentFirst&&!secondOpen){
+                buildsecond(project['value'],ul)
+
+            }
             $('#container').appendChild(li);
     }
 }
 
 function buildsecond(arr,container){
+    //保存title
+    clearFirst(container);
     for(let singletask of  arr){
             let li=document.createElement("li");
             let span=document.createElement("span");
@@ -253,7 +269,8 @@ function confirm(){
     currentFourth['date']=date;
     currentFourth['value']=detail;
     if(edittingSecond){
-        edittingSecond['value'].push(edittingFourth)
+        edittingSecond['value'].push(edittingFourth);
+        rebuild();
     }
     save()
     buildTaskList()
@@ -268,42 +285,61 @@ function save(){//保存
 //工具函数
 var storage=window.localStorage;
 
-//全局变量
-var datawork=JSON.parse(storage.getItem("project"))
+
+
 var currentFirst; //当前选中的第一级
 var currentSecond;//当前选中的第二级
 var currentFourth;
-
+var datawork
 var currentShow;//记录显示完成1 显示未完成- 显示所有的状态0
 var edittingFourth;
 var edittingSecond;
 var titleName="H2"
+var secondOpen=false;
+var preFirst;
 //storage['project']='[{"默认":[]},{"project 01":[{"task01":""},{"task02":""}]}]';
-
-
-buildtop(datawork);
+//全局变量
+if(storage['project']){
+    datawork=JSON.parse(storage.getItem("project"))
+}else{
+    datawork=[//文件夹存于数组
+        {//第一级 , 文件夹
+            "name":"默认",
+            'value':[]
+        }
+    ]
+}
+buildtop();
+//初始化
 //左栏及其操作
 addEvent($('#left'),'click',function(event){//选中最左栏
    
     var target=event.target;
     removeClass($('.on'),'on')
+    if(target.tagName=='SPAN'){
+        target=target.parentNode;
+    }
     if(target.tagName == 'LI'){   
         addClass(target,'on')
         //显示详细      
-        console.log(target.parentNode.firstChild);
-        console.log(typeof target.parentNode.firstElementChild.childNodes[0].data);
-        //currentFirst=findObjWithName(datawork,target.parentNode.firstElementChild.firstChild.innerText.split("\n")[0])
         currentFirst=findObjWithName(datawork,target.parentNode.firstElementChild.childNodes[0].data)
-        //用 innerText.split("\n")[0] 取到标签名字
-        //currentSecond=findObjWithName(currentFirst['value'],target.firstChild.innerText.split("\n")[0]);
         currentSecond=findObjWithName(currentFirst['value'],target.childNodes[0].data);
         buildTaskList()
-
+        return;
     }
     if(target.tagName == titleName){
         currentFirst=findObjWithName(datawork,target.childNodes[0].data)
+        //toggleFirst(target.parentNode)
+        if(preFirst==currentFirst){
+            secondOpen=!secondOpen;
+        }
+        preFirst=currentFirst;
+        rebuild();
+        //buildsecond(currentFirst['value'],target.parentNode);
         addClass(target,'on')
+        return;
     }
+
 
 })
 
@@ -364,6 +400,8 @@ addEvent($('#del'),'click',function(){//从数组中删除对象
         currentFirst['value'].splice(selfIndex,1);
         rebuild()
     }else if(target.tagName== titleName){//删除文件夹
+        console.log(target.innerText);
+        console.log(target.innerText.split("\n"));
         let selfName=target.innerText.split("\n")[0];
         if(selfName=='默认'){
             alert('不能删除默认')
@@ -415,6 +453,7 @@ addEvent($('#delTask'),'click',function(event){//删除四级别或第三级别
         currentSecond['value'].splice(selfIndex,1);
         save()
         buildTaskList();
+        rebuild();
     }
 })
 addEvent($('#showConfirmed'),'click',function(){

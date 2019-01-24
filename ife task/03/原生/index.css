@@ -38,6 +38,10 @@ ul {
   background: silver;
 }
 
+#left span {
+  background-color: inherit;
+}
+
 #middle li {
   text-indent: 2em;
 }
@@ -51,8 +55,6 @@ ul {
 }
 
 #page {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 
@@ -67,56 +69,35 @@ ul {
 
 #left {
   height: 100vh;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   border-right: 2px solid silver;
 }
 
 #left #container {
   overflow: auto;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  flex-grow: 1;
 }
 
 #left .buttonArea {
   height: 50px;
-  -webkit-box-flex: 0;
-      -ms-flex-positive: 0;
-          flex-grow: 0;
-  -ms-flex-negative: 0;
-      flex-shrink: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
 }
 
 #middle {
   height: 100vh;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
 }
 
 #middle #tasklist {
   overflow: auto;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  flex-grow: 1;
 }
 
 #middle .buttonArea {
   height: 50px;
-  -webkit-box-flex: 0;
-      -ms-flex-positive: 0;
-          flex-grow: 0;
-  -ms-flex-negative: 0;
-      flex-shrink: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
 }
-/*# sourceMappingURL=index.css.map */

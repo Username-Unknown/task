@@ -33,6 +33,9 @@ ul{
 }
 #left{
     background: silver;
+    span{
+        background-color: inherit;
+    }
 }
 #middle{
     li{
