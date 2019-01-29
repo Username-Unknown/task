@@ -1,0 +1,95 @@
+*{
+    margin:0px;
+    padding:0px;
+    background:silver;
+}
+
+ul{
+    list-style-type:none;
+}
+h2:hover{
+    background: white;
+}
+
+.second li{
+   
+    width:100%;
+    position: relative;
+    text-indent: 2em;
+    &:hover{
+      background: white;
+    }
+}
+ul{
+    margin-right:3px;
+}
+.buttonArea{
+    button{
+        height:50px;
+    }
+}
+.on{
+    background: white!important;
+}
+#left{
+    background: silver;
+    span{
+        background-color: inherit;
+    }
+}
+#middle{
+    li{
+        text-indent: 2em;
+        &:hover{
+            background: white;
+        }
+    }
+}
+#container{
+    width:200px;
+}
+#page{
+
+    display:flex;
+    
+}
+#tasklist{
+    width:200px;
+    display:1;
+    .taskon{
+        background: white;
+    }
+}
+#left{
+    height:100vh;
+    display:flex;
+    flex-direction: column ;
+    border-right:2px solid silver;
+    #container{
+        overflow:auto;
+        flex-grow:1;
+        
+    }
+    .buttonArea{
+        height:50px;
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+}
+#middle{
+    height:100vh;
+    display:flex;
+    flex-direction: column ;
+    #tasklist{
+        overflow:auto;
+        flex-grow:1;
+    }
+    .buttonArea{
+        height:50px;
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+}
+#right{
+   
+}

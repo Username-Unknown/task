@@ -1,0 +1,103 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  background: silver;
+}
+
+ul {
+  list-style-type: none;
+}
+
+h2:hover {
+  background: white;
+}
+
+.second li {
+  width: 100%;
+  position: relative;
+  text-indent: 2em;
+}
+
+.second li:hover {
+  background: white;
+}
+
+ul {
+  margin-right: 3px;
+}
+
+.buttonArea button {
+  height: 50px;
+}
+
+.on {
+  background: white !important;
+}
+
+#left {
+  background: silver;
+}
+
+#left span {
+  background-color: inherit;
+}
+
+#middle li {
+  text-indent: 2em;
+}
+
+#middle li:hover {
+  background: white;
+}
+
+#container {
+  width: 200px;
+}
+
+#page {
+  display: flex;
+}
+
+#tasklist {
+  width: 200px;
+  display: 1;
+}
+
+#tasklist .taskon {
+  background: white;
+}
+
+#left {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid silver;
+}
+
+#left #container {
+  overflow: auto;
+  flex-grow: 1;
+}
+
+#left .buttonArea {
+  height: 50px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+#middle {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#middle #tasklist {
+  overflow: auto;
+  flex-grow: 1;
+}
+
+#middle .buttonArea {
+  height: 50px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
