@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>播放器</title>
+		<meta charset="UTF-8"/>
+
+		<style>
+			/*
+			
+			#control{width:100%;height:48px;background:red;position:fixed;bottom:0px;right:0px;}
+			#btns{width:150px;height:35px;}
+			
+			#control .pre{width:25px;height:25px;background-position:-31px -131px;margin-top:10px;}
+			#control .play{width:35px;height:35px;background-position:-1px -204px;}
+			#control .next{width:25px;height:25px;background-position:-112px -131px;margin-top:10px;}
+			#control .bar{width:500px;height:10px;background:black;position:absolute;top:30px;left:250px;}
+			#control .bar .cur{position:relative;width:0%;height:10px;background:white;}
+			#control .bar .cur .btnOfBar{position:absolute;top:-3px;right:-4px;width:18px;height:18px;background:url(img/iconall.png)  no-repeat;background-position:-2px -253px;}
+			#updatetime{position:absolute;top:24px;right:480px;}
+			#lis .song{ cursor: pointer;}		
+			#control .word{position:absolute;top:5px;left:250px; }
+			*/
+			
+			*{margin:0px;padding:0px}
+			body{background-color:silver;}
+			#player a{display:block;float:left;background:url(img/playbar.png)  no-repeat;margin:5px 5px;text-indent:-9999px;}
+			#player{position:absolute;width:100%;height:70px;background-color:rgba(0,0,0,0.6);bottom:0;}
+			.btnset{position:absolute;top:50%;transform: translateY(-50%);left:5%;}
+			#player .pre{width:25px;height:25px;background-position:-31px -131px;margin-top:10px;}
+			#player .play{width:35px;height:35px;background-position:-1px -204px;}
+			#player .next{width:25px;height:25px;background-position:-112px -131px;margin-top:10px;}
+			.bar{width:500px;height:10px;background:silver;position:absolute;bottom:30px;left:250px;}
+			.cur{position:relative;height:10px;background:red;}
+			.btnOfBar{position:absolute;top:-3px;right:-4px;width:18px;height:18px;background:url(img/iconall.png)  no-repeat;background-position:-2px -253px;}
+			.playlist{position:absolute;width:500px;height:200px;background:blue;bottom:70px;overflow:auto}
+			.btn:hover{cursor:pointer;}
+			.vloumebar{position:absolute;bottom:45px;right:0px;width:25px;height:150px;background-color:red;}
+			.vloumecur{bottom:0px;width:25px;background-color:blue;}
+			#mutedbtn{position:absolute;right:100px;bottom:25px;width:50px;height:50px;}
+		</style>
+		<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.1/dist/vue-router.js"></script>
+		<script src="axios.js"></script>
+	</head>
+	<body>
+		<!-- <div> -->
+			controls="controls" 默认控件
+			<!-- <audio src="music/123.mp3"  id="music" src=>您的浏览器不支持 audio 标签。 -->
+			<!-- </audio> -->
+			<!-- <button onclick="prepage()" id="prepage">上一页</button> -->
+			<!-- <button onclick="nextpage()" id="nextpage">下一页</button> -->
+			<!-- <div id="control"> -->
+				<!-- <div id="btns"> -->
+					<!-- <a href="javascript:;" hidefocus="true" class="pre" title="上一曲" onclick="pre()" >下一曲</a> -->
+					<!-- <a href="javascript:;" hidefocus="true" class="play" title="播放" onclick="play()" >播放</a> -->
+					<!-- <a href="javascript:;" hidefocus="true" class="next" title="下一曲" onclick="nxt()" >下一曲</a> -->
+				<!-- </div> -->
+				<!-- <div class="word"> -->
+				<!-- songname -->
+				<!-- </div> -->
+				<!-- <div class="bar" onclick="clickPro(event,this)"> -->
+					<!-- <div class="cur"> -->
+						<!-- <span class="btnOfBar"  ></span> -->
+					<!-- </div> -->
+				<!-- </div> -->
+				<!-- <span id="updatetime" >{{currentTime}}</span> -->
+			<!-- </div> -->
+		<!-- </div> -->
+		<!-- <div id='main'> -->
+			<!-- <ul @click='clickInList'> -->
+				<!-- <li v-for="item in music" ref='li'>{{item['name']}}</li> -->
+			<!-- </ul> -->
+		<!-- </div> -->
+		<div id='app'>
+			<router-link to="/playlist/list1">Go to list1</router-link>
+			<router-link to="/playlist/list2">Go to list2</router-link>
+			<router-view :key=" $route.path"></router-view>
+		</div>
+			<div id="player">
+				<playlist v-bind:showlist="showlist" v-bind:music="music" v-on:index-change="indexChange" v-on:delet="deletFromList"></playlist>
+				<audio   id="music"  src=""  ref="audio" @ended="audioend"></audio>
+				<div class="btnset"><!-- buttonset -->
+					<a href="javascript:;" hidefocus="true" class="pre" title="上一曲" @click="pre" >下一曲</a>
+					<a href="javascript:;" hidefocus="true" class="play" title="播放" @click="toggleplay" >播放/暂停</a>
+					<a href="javascript:;" hidefocus="true" class="next" title="下一曲" @click="nxt" >下一曲</a>
+				</div>
+	<!-- 			<div class="bar" onclick="clickPro(event,this)">
+					<div class="cur">
+						<span class="btnOfBar"  ></span>
+					</div>
+				</div> -->
+				<span >{{songname}} </span>
+				 <div>{{playedtime}}</div>
+				 <div class='btn' @click='togglelist'>播放列表:{{length}}</div>
+				<progress-bar v-bind:curper="curper" v-on:click-in-bar="onclickInBar" v-on:clickinball="clickinball" v-on:indrag="indrag"  v-on:dragend="dragend"></progress-bar>
+				<div id='mutedbtn' @click='togglemuted' @mouseenter='entermuted'  @mouseleave='outmuted'>{{muted}}<volume-bar v-bind:volume="volume" v-bind:showvolumebar="showVolumeBar" v-on:click-in-volume-bar="onclickInVolumeBar" v-on:volume-indrag='onVolumeInDrag'></volume-bar></div>
+			</div>
+
+		<script src="./main.js"></script>
+	
+	<body>
+</html>
